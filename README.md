@@ -1,110 +1,79 @@
 
-# 🤖 AI Career Counselor (NLP-Powered)
 
-An intelligent Career Counseling System built on **Deep Learning (BERT)**. This project leverages advanced Natural Language Processing (NLP) to analyze user interests and recommend the most suitable career path from 54 distinct professions, wrapped in a conversational "Generative AI" style interface.
+# 🤖 AI Career Counselor (BERT Notebook)
 
-## 🌟 Project Overview
+This repository hosts a complete, end-to-end **Jupyter Notebook (`.ipynb`)** that fine-tunes a **BERT** model for career guidance. By running this single notebook, you can load data, train a deep learning model, evaluate its performance, and interact with a conversational AI career coach.
 
-This project addresses the challenge of personalized career guidance. Unlike basic rule-based systems, this model understands the *semantic context* of a user's description (e.g., distinguishing "I like design" in an artistic context vs. an engineering context).
+## 📂 Project Overview
 
-It uses a fine-tuned **BERT (Bidirectional Encoder Representations from Transformers)** model to classify user inputs and provides human-like, context-aware advice.
+This project solves the problem of automated career counseling using Natural Language Processing (NLP). Instead of simple keyword matching, it uses a transformer-based model to understand the *context* of a user's skills and interests to predict the best-fit job role from **54 distinct career classes**.
 
-### Key Features
+The notebook handles the entire pipeline:
 
-* **🧠 Advanced NLP Core:** Fine-tuned `bert-base-uncased` model optimized for multi-class sequence classification.
-* **🎯 High Precision:** Achieved **100% Test Accuracy** on the validation set after 30 epochs of training.
-* **💬 LLM-Style Experience:** Features a "Generative Wrapper" that turns raw classification labels into conversational, helpful advice.
-* **📊 Robust Evaluation:** validated using Confusion Matrices and Classification Reports to ensure no bias across 54 classes.
-* **⚡ efficient Inference:** Optimized for local deployment; runs offline without external API dependencies.
+1. **Data Preprocessing:** Cleaning and tokenization.
+2. **Model Training:** Fine-tuning `bert-base-uncased`.
+3. **Evaluation:** Generating confusion matrices and accuracy reports.
+4. **Inference:** An interactive chat loop to test the model immediately.
 
-## 🛠️ Technical Architecture
+## 📊 The Dataset
 
-| Component | Technology | Description |
-| --- | --- | --- |
-| **Model Architecture** | BERT (Base Uncased) | Pre-trained Transformer fine-tuned for 54-class classification. |
-| **Training Library** | Hugging Face Transformers | Used `Trainer` API with AdamW optimizer and linear learning rate scheduler. |
-| **Dataset** | Custom Career QA Dataset | 1,600+ labeled samples cleaned and stratified into Train/Val/Test splits. |
-| **Tokenizer** | WordPiece | BERT's native sub-word tokenizer with dynamic padding (`max_length=128`). |
-| **Interface** | Python Script | Interactive CLI with confidence scoring and "Expert System" responses. |
+This project utilizes the **Career Guidance QA Dataset**.
 
-## 🚀 How It Works
+* **Source:** [Hugging Face - Pradeep016/career-guidance-qa-dataset](https://huggingface.co/datasets/Pradeep016/career-guidance-qa-dataset/tree/main)
+* **Format:** The notebook is designed to accept the `.csv` version of this dataset.
+* **Content:** It contains pairs of user queries (skills/interests) and career labels (roles).
 
-1. **Input Processing:** The user inputs a natural language query (e.g., *"I love working with data and predicting future trends"*).
-2. **Tokenization:** The text is normalized, tokenized, and converted into input IDs and attention masks.
-3. **Inference:** The BERT model processes the sequence and outputs logits for 54 career classes.
-4. **Generative Response:** The predicted label (e.g., "Data Scientist") is mapped to a predefined "persona" response to mimic an LLM interaction.
+## 🚀 How to Use (The Notebook)
 
-## 📊 Performance Metrics
+The entire project is contained within `Career_Counselor.ipynb`. Follow these steps:
 
-The model was trained with the following hyperparameter configuration:
+### 1. Open in Google Colab
 
-* **Epochs:** 30
-* **Batch Size:** 16
-* **Learning Rate:** 3e-5
-* **Warmup Steps:** 200
+Upload the `.ipynb` file to [Google Colab](https://colab.research.google.com/) for the best experience (free GPU access is recommended).
 
-### Training Results
+### 2. Prepare the Data
 
-* **Training Loss:** 0.0287 (Converged)
-* **Test Accuracy:** **100.00%**
-* **Precision/Recall:** 1.00 across all supported classes.
+Download the `train.csv` (or the full dataset CSV) from the [Hugging Face link](https://huggingface.co/datasets/Pradeep016/career-guidance-qa-dataset/tree/main) mentioned above.
 
-*(Detailed classification reports and confusion matrices are available in the `logs/` directory)*
+### 3. Run the Cells
 
-## 💻 Installation & Usage
+Execute the notebook cells in order:
 
-### 1. Setup
+* **Cell 1:** Installs necessary libraries (`transformers`, `datasets`, `torch`).
+* **Cell 2:** Defines the `CareerCounselingBERT` class (the core logic).
+* **Cell 3:** Uploads your downloaded CSV file. processing handles file renaming automatically.
+* **Cell 4:** Trains the model. (Note: The notebook is configured for ~30 epochs to achieve high accuracy).
+* **Cell 5:** Evaluates the model, exports the artifacts, and launches an **Interactive Chat**.
 
-Clone the repository and install the required dependencies:
+## 🧠 Model Performance
 
-```bash
-git clone https://github.com/yourusername/ai-career-counselor.git
-cd ai-career-counselor
-pip install -r requirements.txt
+Based on training logs included in the notebook:
 
-```
+* **Test Accuracy:** 100.00%
+* **Training Loss:** < 0.03
+* **Classes Supported:** 54
 
-### 2. Run the Model
+## 📦 Exporting the Model
 
-Execute the inference script to start the interactive session:
+The notebook includes a feature in **Cell 5** that automatically:
 
-```bash
-python run_model.py
+1. Saves the trained model weights (`pytorch_model.bin`).
+2. Saves the tokenizer and label encoders.
+3. Generates a `run_model.py` script for local use.
+4. Zips everything into a downloadable file (`career_model_final.zip`).
 
-```
+## 🛠️ Requirements
 
-### 3. Example Interaction
+* Python 3.x
+* Transformers (Hugging Face)
+* PyTorch
+* Scikit-Learn
+* Pandas / NumPy
 
-```text
-Describe your interests: I enjoy solving complex logic puzzles and writing code.
-💡 Prediction: Software Engineer (Confidence: 99.8%)
-🤖 AI Advice: "Based on your inputs, Software Engineering is the ideal path. 
-   You seem to enjoy logic and building systems. I recommend starting with 
-   Python or Java and building a GitHub portfolio."
+## 🤝 Credits
 
-```
-
-## 📂 Project Structure
-
-```
-├── career_counselor_final/      # Exported Model Artifacts
-│   ├── pytorch_model.bin        # Trained Weights
-│   ├── config.json              # Model Configuration
-│   ├── vocab.txt                # Tokenizer Vocabulary
-│   ├── label_encoder.pkl        # Label Mappings
-│   └── run_model.py             # Inference Script
-├── dataset/                     # Training Data (CSV)
-├── notebooks/                   # Jupyter/Colab Training Notebooks
-├── requirements.txt             # Python Dependencies
-└── README.md                    # Project Documentation
-
-```
-
-## 🔮 Future Improvements
-
-* **Web Interface:** Deploying the model using Streamlit for a user-friendly web app.
-* **RAG Integration:** Connecting the model to a live job market database to recommend *actual* open positions.
-* **Resume Parsing:** Adding functionality to upload and analyze PDF resumes directly.
+* **Dataset:** [Pradeep016 on Hugging Face](https://huggingface.co/datasets/Pradeep016/career-guidance-qa-dataset/tree/main)
+* **Base Model:** BERT by Google Research
 
 ---
 
